@@ -223,6 +223,10 @@
   .dash-empty{text-align:center;color:var(--muc-nhat);padding:20px;font-style:italic}
   .tag-yes{color:#2e7d32;font-weight:500}.tag-no{color:var(--do);font-weight:500}
 
+  .check-col{display:flex;flex-direction:column;gap:8px}
+  .check-col label{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1px solid var(--vien);border-radius:4px;cursor:pointer;font-size:14px;color:var(--muc);background:#fffdfb;transition:.15s}
+  .check-col input{width:16px;height:16px;accent-color:var(--rsvp);margin:0;flex:none}
+  .check-col label:has(input:checked){background:#f6efe9;border-color:var(--rsvp)}
   .hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0;pointer-events:none}
   #attendDetails{transition:opacity .3s,max-height .3s;overflow:hidden}
   #attendDetails.hidden{max-height:0;opacity:0;margin:0}
@@ -504,11 +508,11 @@
         </div>
         <div id="attendDetails">
           <div class="field">
-            <label>Anh / chị sẽ chung vui trong buổi nào ạ?</label>
-            <div class="radio-row">
-              <label><input type="radio" name="event" value="Lễ Tân Hôn"><span>Lễ Tân Hôn</span></label>
-              <label><input type="radio" name="event" value="Tiệc cưới"><span>Tiệc cưới</span></label>
-              <label><input type="radio" name="event" value="Cả hai" checked><span>Cả hai</span></label>
+            <label>Anh / chị sẽ chung vui trong buổi nào ạ? (có thể chọn nhiều)</label>
+            <div class="check-col">
+              <label><input type="checkbox" name="ev" value="Tiệc thân mật"><span>Tiệc thân mật · 10.10</span></label>
+              <label><input type="checkbox" name="ev" value="Lễ Tân Hôn"><span>Lễ Tân Hôn · 11.10</span></label>
+              <label><input type="checkbox" name="ev" value="Tiệc cưới" checked><span>Tiệc cưới · 11.10</span></label>
             </div>
           </div>
           <div class="field">
@@ -648,7 +652,7 @@
     const attend=form.attend.value;
     const come=attend==='Có mặt';
     const data={guestName:name,attend:attend,
-      event: come?form.event.value:'',
+      event: come?Array.from(form.querySelectorAll('input[name=ev]:checked')).map(function(c){return c.value;}).join(', '):'',
       numGuest: come?document.getElementById('numGuest').value:'',
       wish:document.getElementById('wish').value.trim().slice(0,500),
       invitedAs:guest||'', createdAt:ready?serverTimestamp():new Date().toISOString()};
